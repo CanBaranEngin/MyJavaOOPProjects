@@ -22,7 +22,7 @@ public class Purchase {
         while(stop){
             System.out.println("Movie Subscription System  (1)  ");
             System.out.println("Movie List  (2)  ");
-            System.out.println("User MemberShip Info  (3)  ");
+            System.out.println("Account Info  (3)  ");
             System.out.println("Movie renting and purchasing (4)  ");
             System.out.println("Exit  (5)  ");
             int select = inp.nextInt();
@@ -36,6 +36,7 @@ public class Purchase {
                     movieList();
                     break;
                 case 3 :
+                    userInfo();
                     break;
 
                 case 4:
@@ -47,9 +48,6 @@ public class Purchase {
                     stop=false;
 
             }
-
-
-
 
         }
     }
@@ -96,19 +94,87 @@ public class Purchase {
 
     public void movieRenPur(){
         Scanner inp = new Scanner(System.in);
-        if(this.user.getCredit()!=0){
-            movieList();
-            System.out.println("Please enter id number of film which you want to rent:  ");
-            int select = inp.nextInt();
-            this.user.getMovieList().add(this.movie.movies().get(select).getName());
-            this.user.setCredit(this.user.getCredit()-movie.movies().get(select).getCredit());
-            System.out.println("You rent a film which name is : " +this.movie.movies().get(select).getName());
-            System.out.println("Your film list is: " + this.user.getMovieList());
+        boolean stop=true;
+        
+        while(stop){
+            System.out.println(" <<< (P)urchasing & (R)enting (E)xit >>> ");
+            String choose = inp.nextLine();
+            if(choose.equalsIgnoreCase("r")){
+                if(this.user.getCredit()!=0){
+                    movieList();
+                    System.out.println("If you want to return the previous menu please enter (4)");
+                    System.out.println();
+                    System.out.println("Please enter id number of movie which you want to rent:  ");
+                
+                    int select = inp.nextInt();
+                    if(select==4){
+                        break;
+                    }
+                    if(this.user.getMovieList().contains(this.movie.movies().get(select-1).getName())){
+                        System.out.println("You already have this movie please rent another movie ");
+                    }
+                    else{
+                        this.user.getMovieList().add(this.movie.movies().get(select-1).getName());
+                        this.user.setCredit(this.user.getCredit()-movie.movies().get(select-1).getCredit());
+                        System.out.println("You rent a film which name is : " +this.movie.movies().get(select-1).getName());
+                        System.out.println("Your film list is: " + this.user.getMovieList());
+        
+                    }
+                
+                    
+        
+                }
+                if(this.user.getCredit()==0){
+                    System.out.println("Credit in your account is zero please enter (1) and go to the Movie Subscription System menu!!");
+                }
 
+            }
+            if(choose.equalsIgnoreCase("p")){
+                if(this.user.getCredit()!=0){
+                    movieList();
+                    System.out.println("If you want to return the previous menu please enter (4)");
+                    System.out.println();
+                    System.out.println("Please enter id number of movie which you want to buy:  ");
+                    int select = inp.nextInt();
+                    if(select==4){
+                        break;
+                    }
+                    if(this.user.getMovieList().contains(this.movie.movies().get(select-1).getName())){
+                        System.out.println("You already have this movie please buy another movie ");
+                    }else{
+                        this.user.getMovieList().add(this.movie.movies().get(select-1).getName());
+                        this.user.setMoney(this.user.getMoney()-movie.movies().get(select-1).getPrice());
+                        System.out.println("You buy a film which name is : " +this.movie.movies().get(select-1).getName());
+                        System.out.println("Your film list is: " + this.user.getMovieList());
+        
+                    }
+                    
+        
+                }
+                if(this.user.getMoney()==0){
+                    System.out.println("Money in your account is zero please enter (1) and go to the Movie Subscription System menu!!");
+                }
+
+
+            }
+            if(choose.equalsIgnoreCase("e")){
+                stop=false;
+            }
+            
+                
         }
-        if(this.user.getCredit()==0){
-            System.out.println("Credit in your account is zero please enter (1) and go to the Movie Subscription System menu!!");
-        }
+       
+    }
+
+    public void userInfo(){
+        System.out.println("-------------------------------");
+        System.out.println("Your current credit: " + this.user.getCredit());
+        System.out.println();
+        System.out.println("Your current money: " + this.user.getMoney());
+        System.out.println();
+        System.out.println("List of movie that you have: " + this.user.getMovieList());
+        System.out.println("-------------------------------");
+
     }
 
     public User getUser() {
